@@ -3,6 +3,7 @@ import subprocess
 from typing import Annotated
 from langchain_core.tools import tool
 from .decorators import log_io
+from security import safe_command
 
 # Initialize logger
 logger = logging.getLogger(__name__)
@@ -17,8 +18,7 @@ def bash_tool(
     logger.info(f"Executing Bash Command: {cmd}")
     try:
         # Execute the command and capture output
-        result = subprocess.run(
-            cmd, shell=True, check=True, text=True, capture_output=True
+        result = safe_command.run(subprocess.run, cmd, shell=True, check=True, text=True, capture_output=True
         )
         # Return stdout as the result
         return result.stdout
